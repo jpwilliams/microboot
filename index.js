@@ -5,6 +5,5 @@ function Microboot (options) {
 }
 
 Microboot.prototype.up = require('./lib/up')
-Microboot.prototype.down = require('./lib/down')
 
 module.exports = new Microboot()
