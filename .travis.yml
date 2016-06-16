@@ -1,5 +1,8 @@
 language: node_js
 node_js:
   - "node"
+  - "6"
+  - "4"
+  - "0.12"
   - "0.10.45"
 script: "npm run coverage"
