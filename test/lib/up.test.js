@@ -55,4 +55,8 @@ describe('microboot/lib/up', function () {
             expect(global.end1).to.be.below(global.end2)
         })
     })
+
+    it ('should fail if a non-function callback is provided', function () {
+        expect(up.bind(up, [], {})).to.throw('optional callback on bootup must be a function')
+    })
 })
