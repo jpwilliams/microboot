@@ -1,0 +1,20 @@
+{
+  "name": "microboot",
+  "version": "0.1.0",
+  "description": "Boot your app.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/.bin/mocha --reporter spec --require test/bootstrap/node test/*.test.js test/**/*.test.js"
+  },
+  "author": "Jack Williams <jack@tagstr.co>",
+  "license": "ISC",
+  "dependencies": {
+    "debug": "^2.2.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
+    "sinon": "^1.17.4",
+    "sinon-chai": "^2.8.0"
+  }
+}
