@@ -24,6 +24,10 @@ describe('microboot/lib/up', function () {
         expect(callback).to.have.been.called
     })
 
+    it('should succeed if passed valid phases but no callback', function () {
+        expect(up.bind(up, ['test/data/fake'])).to.not.throw()
+    })
+
     it('should search for phases based on CWD', function () {
         expect(up.bind(up, ['na'])).to.throw(process.cwd() + '/na')
     })
