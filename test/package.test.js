@@ -1,15 +1,11 @@
 var microboot = require('..')
 
 describe('microboot', function () {
-    it('should export up function', function () {
-        expect(microboot.up).to.be.a('function')
+    it('should export a function', function () {
+        expect(microboot).to.be.a('function')
     })
 
-    it('should export options function', function () {
-        expect(microboot.options).to.be.a('function')
-    })
-
-    it('should export opts object', function () {
-        expect(microboot.opts).to.be.an('object')
+    it('should export "up" as a circular reference', function () {
+        expect(microboot.up).to.equal(microboot)
     })
 })

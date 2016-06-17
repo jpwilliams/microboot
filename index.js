@@ -1,12 +1,4 @@
-function Microboot () {
-    this.opts = {
-        no_recursive: false
-    }
+var up = require('./lib/up')
+up.up = up
 
-    return this
-}
-
-Microboot.prototype.up = require('./lib/up')
-Microboot.prototype.options = require('./lib/options')
-
-module.exports = new Microboot()
+module.exports = up
