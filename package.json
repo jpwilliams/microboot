@@ -1,7 +1,7 @@
 {
   "name": "microboot",
   "version": "1.1.1",
-  "description": "Boot your app.",
+  "description": "Boot up your app in wee little modules.",
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/mocha --reporter spec --require test/bootstrap/node test/*.test.js test/**/*.test.js",
@@ -19,5 +19,26 @@
     "mocha": "^2.5.3",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/jpwilliams/microboot.git"
+  },
+  "keywords": [
+    "boot",
+    "init",
+    "initialise",
+    "initialize",
+    "start",
+    "startup",
+    "micro",
+    "service",
+    "microservice",
+    "microservices",
+    "phase"
+  ],
+  "bugs": {
+    "url": "https://github.com/jpwilliams/microboot/issues"
+  },
+  "homepage": "https://github.com/jpwilliams/microboot#readme"
 }
