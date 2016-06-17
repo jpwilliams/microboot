@@ -29,15 +29,15 @@ describe('microboot/lib/up', function () {
     })
 
     it('should search for phases based on CWD', function () {
-        expect(up.bind(up, ['na'])).to.throw(process.cwd() + '/na')
+        expect(up.bind(up, ['na'])).to.throw('Cannot resolve path')
     })
 
     it('should fail if passed invalid phases', function () {
-        expect(up.bind(up, ['na'])).to.throw('no such file or directory')
+        expect(up.bind(up, ['na'])).to.throw('Cannot resolve path')
     })
 
     it('should fail if passed a mixture of valid and invalid phases', function () {
-        expect(up.bind(up, ['test/data/fake', 'na'])).to.throw('no such file or directory')
+        expect(up.bind(up, ['test/data/fake', 'na'])).to.throw('Cannot resolve path')
     })
 
     it('should run database phase', function (done) {
