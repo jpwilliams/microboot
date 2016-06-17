@@ -1,5 +1,3 @@
-module.exports = function database (next) {
+module.exports = function database () {
     global.database = true
-
-    return next()
 }
