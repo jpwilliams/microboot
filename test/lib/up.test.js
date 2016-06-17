@@ -3,6 +3,7 @@ var up = require('../../lib/up')
 describe('microboot/lib/up', function () {
     beforeEach(function () {
         global.database = false
+        global.endpoints = false
         global.end1 = false
         global.end2 = false
         global.end3 = false
@@ -40,9 +41,12 @@ describe('microboot/lib/up', function () {
         expect(up.bind(up, ['test/data/fake', 'na'])).to.throw('no such file or directory')
     })
 
-    it('should run database phase', function (done) {
+    it('should run database and endpoints phase', function (done) {
+        this.slow(200)
+
         up(['test/data/fake'], function () {
             expect(global.database).to.equal(true)
+            expect(global.endpoints).to.equal(true)
 
             done()
         })
