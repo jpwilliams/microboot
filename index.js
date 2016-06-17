@@ -1,5 +1,5 @@
 function Microboot () {
-    this.options = {
+    this.opts = {
         no_recursive: false
     }
 
