@@ -36,23 +36,29 @@ describe('microboot/lib/up', function () {
         expect(up.bind(up, ['test/data/fake', 'na'])).to.throw('no such file or directory')
     })
 
-    it('should run database phase', function () {
+    it('should run database phase', function (done) {
         up(['test/data/fake'], function () {
             expect(global.database).to.equal(true)
+
+            done()
         })
     })
 
-    it('should run items in order', function () {
+    it('should run items in order', function (done) {
         up(['test/data/timings/first'], function () {
             expect(global.end1).to.be.below(global.end2)
+
+            done()
         })
     })
 
-    it('should run phases in order', function () {
+    it('should run phases in order', function (done) {
         up(['test/data/timings/second', 'test/data/timings/first'], function () {
             expect(global.end3).to.be.below(global.end4)
             expect(global.end4).to.be.below(global.end1)
             expect(global.end1).to.be.below(global.end2)
+
+            done()
         })
     })
 
