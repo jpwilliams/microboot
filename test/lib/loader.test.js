@@ -87,7 +87,7 @@ describe('microboot/lib/loader', function () {
             var files = loader.lookup('test/data/fake')
 
             expect(files).to.be.an('array')
-            expect(files).to.have.lengthOf(1)
+            expect(files).to.have.lengthOf(2)
             expect(files).to.not.contain('test/data/fake/.hidden.js')
         })
 
@@ -95,7 +95,7 @@ describe('microboot/lib/loader', function () {
             var files = loader.lookup('test/data/fake')
 
             expect(files).to.be.an('array')
-            expect(files).to.have.lengthOf(1)
+            expect(files).to.have.lengthOf(2)
             expect(files).to.not.contain('test/data/fake/test.jpg')
         })
 
@@ -103,7 +103,7 @@ describe('microboot/lib/loader', function () {
             var files = loader.lookup('test/data/fake/**')
 
             expect(files).to.be.an('array')
-            expect(files).to.have.lengthOf(1)
+            expect(files).to.have.lengthOf(2)
             expect(files).to.not.contain('test/data/fake/.hidden.js')
         })
 
@@ -111,7 +111,7 @@ describe('microboot/lib/loader', function () {
             var files = loader.lookup('test/data/fake/**')
 
             expect(files).to.be.an('array')
-            expect(files).to.have.lengthOf(1)
+            expect(files).to.have.lengthOf(2)
             expect(files).to.not.contain('test/data/fake/test.jpg')
         })
 
