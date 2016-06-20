@@ -66,6 +66,32 @@ You're set! _microboot_ will now first run all JS files found in the `boot/datab
 
 If you want to know more about the syntax used for specifying recursiveness and the like, take a look at [glob](https://github.com/isaacs/node-glob); it's what's behind _microboot_'s loader.
 
+## Failing to initialise
+
+If something screws up, you _should_ want to stop your app starting. If that's the case, you can throw an error during a step to stop things in their tracks.
+
+For a _synchronous_ step, just go ahead and throw:
+
+``` js
+module.exports = function my_broken_api () {
+  throw new Error('Oh no! It\'s all gone wrong!')
+}
+```
+
+For an _asynchronous_ step, return your error as the first argument of the callback:
+
+``` js
+module.exports = function my_broken_api (done) {
+  startUpApi(function (err) {
+    if (err) {
+      return done(err)
+    }
+
+    return done()
+  })
+}
+```
+
 ## Examples
 
 Yay examples! These all assume the following directory tree, the root representing your project's current working directory.
