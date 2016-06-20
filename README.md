@@ -10,7 +10,9 @@ microboot([
   'boot/logging',
   'api/**',
   'listeners'
-])
+], function () {
+  console.log('App booted!')
+})
 ```
 
 ## Contents
@@ -37,7 +39,9 @@ microboot([
   'boot/databases',
   'utils/logging.js',
   'lib/endpoints/**'
-])
+], function () {
+  console.log('Ready!')
+})
 ```
 
 In the files you choose to run, ensure they export a function that will be triggered when _microboot_ iterates through. You can optionally map the `done` argument make the step asynchronous. Here are two examples:
