@@ -1,9 +1,4 @@
-function Microboot (options) {
-    this.options = options
+var up = require('./lib/up')
+up.up = up
 
-    return this
-}
-
-Microboot.prototype.up = require('./lib/up')
-
-module.exports = new Microboot()
+module.exports = up
