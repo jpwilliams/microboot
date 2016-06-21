@@ -1,4 +1,5 @@
-var up = require('../../lib/up')
+var up_init = require('../../lib/up')
+var up = up_init(__dirname)
 
 describe('microboot/lib/up', function () {
     beforeEach(function () {
@@ -10,7 +11,11 @@ describe('microboot/lib/up', function () {
         global.end4 = false
     })
 
-    it('should export up function', function () {
+    it('should export init function', function () {
+        expect(up_init).to.be.a('function')
+    })
+
+    it('should return up function', function () {
         expect(up).to.be.a('function')
     })
 
@@ -26,7 +31,7 @@ describe('microboot/lib/up', function () {
     })
 
     it('should succeed if passed valid phases but no callback', function () {
-        expect(up.bind(up, ['test/data/fake'])).to.not.throw()
+        expect(up.bind(up, ['../data/fake'])).to.not.throw()
     })
 
     it('should search for phases based on CWD', function () {
@@ -38,13 +43,13 @@ describe('microboot/lib/up', function () {
     })
 
     it('should fail if passed a mixture of valid and invalid phases', function () {
-        expect(up.bind(up, ['test/data/fake', 'na'])).to.throw('Cannot resolve path')
+        expect(up.bind(up, ['../data/fake', 'na'])).to.throw('Cannot resolve path')
     })
 
     it('should run database and endpoints phase', function (done) {
         this.slow(200)
 
-        up(['test/data/fake'], function () {
+        up(['../data/fake'], function () {
             expect(global.database).to.equal(true)
             expect(global.endpoints).to.equal(true)
 
@@ -53,7 +58,7 @@ describe('microboot/lib/up', function () {
     })
 
     it('should run items in order', function (done) {
-        up(['test/data/timings/first'], function () {
+        up(['../data/timings/first'], function () {
             expect(global.end1).to.be.below(global.end2)
 
             done()
@@ -61,7 +66,7 @@ describe('microboot/lib/up', function () {
     })
 
     it('should run phases in order', function (done) {
-        up(['test/data/timings/second', 'test/data/timings/first'], function () {
+        up(['../data/timings/second', '../data/timings/first'], function () {
             expect(global.end3).to.be.below(global.end4)
             expect(global.end4).to.be.below(global.end1)
             expect(global.end1).to.be.below(global.end2)
