@@ -1,5 +1,5 @@
-module.exports = function second (next) {
-    global.end2 = new Date().getTime()
+module.exports = function second (arg, next) {
+    arg.end2 = new Date().getTime()
 
     setTimeout(function () {
         return next()

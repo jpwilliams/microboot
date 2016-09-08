@@ -1,5 +1,5 @@
-module.exports = function fourth (next) {
-    global.end4 = new Date().getTime()
+module.exports = function fourth (arg, next) {
+    arg.end4 = new Date().getTime()
 
     setTimeout(function () {
         return next()

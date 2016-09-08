@@ -1,3 +1,3 @@
-module.exports = function database () {
-    global.database = true
+module.exports = function database (arg) {
+    arg.database = true
 }

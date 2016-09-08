@@ -18,7 +18,7 @@ describe('microboot/lib/up', function () {
         expect(up).to.throw('Phases on bootup must be an array')
     })
 
-    it('should succeed if passed no phases', function () {
+    it('should succeed if passed no phases and no arg', function () {
         var callback = sinon.spy()
 
         up([], callback)
@@ -27,6 +27,26 @@ describe('microboot/lib/up', function () {
 
     it('should succeed if passed valid phases but no callback', function () {
         expect(up.bind(up, ['test/data/fake'])).to.not.throw()
+    })
+
+    it('should succeed if passed valid phases and an arg', function () {
+        expect(up.bind(up, ['test/data/fake'], {})).to.not.throw()
+    })
+
+    it('should use arg as callback if no callback passed and arg is function', function (done) {
+        this.slow(200)
+
+        up(['test/data/fake'], function () {
+            done()
+        })
+    })
+
+    it('should use callback as callback if arg has been specified', function (done) {
+        this.slow(200)
+
+        up(['test/data/fake'], function () {}, function () {
+            done()
+        })
     })
 
     it('should search for phases based on CWD', function () {
@@ -44,33 +64,33 @@ describe('microboot/lib/up', function () {
     it('should run database and endpoints phase', function (done) {
         this.slow(200)
 
-        up(['test/data/fake'], function () {
-            expect(global.database).to.equal(true)
-            expect(global.endpoints).to.equal(true)
+        up(['test/data/fake'], {}, function (arg) {
+            expect(arg.database).to.equal(true)
+            expect(arg.endpoints).to.equal(true)
 
             done()
         })
     })
 
     it('should run items in order', function (done) {
-        up(['test/data/timings/first'], function () {
-            expect(global.end1).to.be.below(global.end2)
+        up(['test/data/timings/first'], function (arg) {
+            expect(arg.end1).to.be.below(arg.end2)
 
             done()
         })
     })
 
     it('should run phases in order', function (done) {
-        up(['test/data/timings/second', 'test/data/timings/first'], function () {
-            expect(global.end3).to.be.below(global.end4)
-            expect(global.end4).to.be.below(global.end1)
-            expect(global.end1).to.be.below(global.end2)
+        up(['test/data/timings/second', 'test/data/timings/first'], function (arg) {
+            expect(arg.end3).to.be.below(arg.end4)
+            expect(arg.end4).to.be.below(arg.end1)
+            expect(arg.end1).to.be.below(arg.end2)
 
             done()
         })
     })
 
     it ('should fail if a non-function callback is provided', function () {
-        expect(up.bind(up, [], {})).to.throw('optional callback on bootup must be a function')
+        expect(up.bind(up, [], {}, {})).to.throw('optional callback on bootup must be a function')
     })
 })

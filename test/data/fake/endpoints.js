@@ -1,6 +1,6 @@
-module.exports = function endpoints (next) {
+module.exports = function endpoints (arg, next) {
     setTimeout(function () {
-        global.endpoints = true
+        arg.endpoints = true
 
         return next()
     }, 50)
