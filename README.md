@@ -20,6 +20,7 @@ microboot([
 * [Introduction](#introduction)
 * [How it works](#how-it-works)
 * [Examples](#examples)
+* [API reference](#api-reference)
 * [Debugging](#debugging)
 
 ## Introduction
@@ -39,26 +40,28 @@ microboot([
   'boot/databases',
   'utils/logging.js',
   'lib/endpoints/**'
-], function () {
+], function (arg) {
   console.log('Ready!')
 })
 ```
 
-In the files you choose to run, ensure they export a function that will be triggered when _microboot_ iterates through. You can optionally map the `done` argument make the step asynchronous. Here are two examples:
+In the files you choose to run, ensure they export a function that will be triggered when _microboot_ iterates through. You can optionally map two parameters: one that's passed through all functions, allowing you to build the object as it goes through and system and the `done` argument which makes the step asynchronous. Here are two examples:
 
 ``` js
 // boot/databases/mongodb.js
-module.exports = function mongodb (callback) {
-  connectToMongoDb(function () {
-    callback()
+module.exports = function mongodb (arg, done) {
+  connectToMongoDb(function (connection) {
+    arg.mongo = connection
+
+    return done()
   })
 }
 ```
 
 ``` js
 // lib/endpoints/post/login.js
-module.exports = function post_login () {
-  newAppEndpoint('post', '/login')
+module.exports = function post_login (arg) {
+  arg.api.newAppEndpoint('post', '/login')
 }
 ```
 
@@ -81,7 +84,7 @@ module.exports = function my_broken_api () {
 For an _asynchronous_ step, return your error as the first argument of the callback:
 
 ``` js
-module.exports = function my_broken_api (done) {
+module.exports = function my_broken_api (arg, done) {
   startUpApi(function (err) {
     if (err) {
       return done(err)
@@ -146,6 +149,19 @@ microboot(['boot', 'lib/utils'])
 ``` js
 microboot(['boot/*', 'boot/logging'])
 ```
+
+## API reference
+
+#### microboot(phases, [arg], [callback])
+
+* `phases` - An array of file paths (from the [CWD](https://en.wikipedia.org/wiki/Current_working_directory)) from which to load _Microboot_'s list of functions to run.
+* `arg` - _Optional, defaults to `{}`_ A single argument that is passed through every function run, allowing you to mutate it to build up the service as it boots. If `arg` is a function and no `callback` has been provided, `arg` will instead be used as the callback.
+* `callback(arg)` - _Optional_ The function to run once all phases have been successfully run. Is passed the final, mutated `arg`.
+
+#### phase([arg], [callback])
+
+* `arg` - _Optional_ The arg that's being passed through each phase run. Can be specified in the `microboot` call or defaults to `{}`.
+* `callback(err)` - _Optional_ If this is mapped to your phase function the phase will be treated as asynchronous and will require that this callback is run before moving to the next one. If there's an error, pass it back as the first parameter.
 
 ## Debugging
 
