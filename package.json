@@ -18,7 +18,7 @@
     "coveralls": "^2.11.9",
     "istanbul": "^0.4.3",
     "mocha": "^3.0.0",
-    "sinon": "^1.17.4",
+    "sinon": "^1.17.6",
     "sinon-chai": "^2.8.0"
   },
   "repository": {
