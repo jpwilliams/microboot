@@ -10,7 +10,7 @@
   "author": "Jack Williams <jack@tagstr.co>",
   "license": "ISC",
   "dependencies": {
-    "debug": "^2.2.0",
+    "debug": "^2.3.0",
     "glob": "^7.0.4"
   },
   "devDependencies": {
