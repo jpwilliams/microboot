@@ -43,10 +43,17 @@ describe('microboot/lib/loader', function () {
             expect(callbacks[4]).to.equal(sidejob)
         })
 
-        it('should throw if a found file does not export a function', function () {
-            expect(loader.load.bind(loader.load, [
-                'test/data/errors'
-            ])).to.throw('all phases must be functions')
+        it('should load all, but only add functions to run later', function () {
+            var callbacks = loader.load(['test/data/errors'])
+
+            expect(global.testObj).to.be.an('object')
+            expect(global.testObj.foo).to.equal('bar')
+
+            expect(callbacks).to.be.an('array')
+            expect(callbacks).to.have.lengthOf(2)
+
+            expect(callbacks[0]).to.be.a('function')
+            expect(callbacks[1]).to.be.a('function')
         })
 
         it('should return an empty array if no paths are given', function () {

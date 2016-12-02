@@ -1,3 +1,5 @@
-module.exports = {
-    'foo': 'bar'
+global.testObj = {
+  'foo': 'bar'
 }
+
+module.exports = global.testObj
