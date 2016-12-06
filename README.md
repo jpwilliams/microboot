@@ -1,6 +1,6 @@
 # microboot
 
-[![Build Status](https://api.travis-ci.org/jpwilliams/microboot.svg)](https://travis-ci.org/jpwilliams/microboot) [![Coverage Status](https://coveralls.io/repos/github/jpwilliams/microboot/badge.svg?branch=master)](https://coveralls.io/github/jpwilliams/microboot?branch=master) [![Dependencies](https://img.shields.io/david/jpwilliams/microboot.svg)]()
+[![Build Status](https://api.travis-ci.org/jpwilliams/microboot.svg)](https://travis-ci.org/jpwilliams/microboot) [![Coverage Status](https://coveralls.io/repos/github/jpwilliams/microboot/badge.svg?branch=master)](https://coveralls.io/github/jpwilliams/microboot?branch=master) [![Dependencies](https://david-dm.org/jpwilliams/microboot/status.svg)](https://david-dm.org/jpwilliams/microboot) [![npm version](https://badge.fury.io/js/microboot.svg)](https://www.npmjs.com/package/microboot)
 
 Boot up your app in wee little modules with the help of [glob](https://github.com/isaacs/node-glob).
 
