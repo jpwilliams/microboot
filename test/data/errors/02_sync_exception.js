@@ -1,3 +1,3 @@
-module.exports = function sync_exception () {
-    throw new Error('Error thrown')
+module.exports = function syncException () {
+  throw new Error('Error thrown')
 }

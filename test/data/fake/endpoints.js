@@ -1,7 +1,7 @@
 module.exports = function endpoints (arg, next) {
-    setTimeout(function () {
-        arg.endpoints = true
+  setTimeout(function () {
+    arg.endpoints = true
 
-        return next()
-    }, 50)
+    return next()
+  }, 50)
 }
