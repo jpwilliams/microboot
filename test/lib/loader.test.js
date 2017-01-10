@@ -7,15 +7,10 @@ describe('microboot/lib/loader', function () {
     expect(loader.load).to.be.a('function')
   })
 
-  it('should expose the "lookup" function', function () {
-    expect(loader.lookup).to.be.a('function')
-  })
-
   describe('-> load', function () {
-    it('should throw if not given an array for "paths"', function () {
+    it('should throw if not given an array or string for "paths"', function () {
       var err = 'invalid "paths" argument'
 
-      expect(loader.load.bind(loader.load, 'test')).to.throw(err)
       expect(loader.load.bind(loader.load, {})).to.throw(err)
       expect(loader.load.bind(loader.load, null)).to.throw(err)
       expect(loader.load.bind(loader.load, 123)).to.throw(err)
@@ -84,109 +79,6 @@ describe('microboot/lib/loader', function () {
       expect(callbacks[2].func).to.be.a('function')
       expect(callbacks[3].func).to.be.a('function')
       expect(callbacks[4].func).to.be.a('function')
-    })
-  })
-
-  describe('-> lookup', function () {
-    it('should throw if given a non-existent path', function () {
-      expect(loader.lookup.bind(loader.lookup, '/test/data/does/not/exist')).to.throw('Cannot resolve path')
-    })
-
-    it('should find a single JS file if given an extensionless path', function () {
-      var files = loader.lookup('test/data/fake/database')
-
-      expect(files).to.be.an('array')
-      expect(files).to.have.lengthOf(1)
-      expect(files[0]).to.equal('test/data/fake/database.js')
-    })
-
-    it('should not return hidden files', function () {
-      var files = loader.lookup('test/data/fake')
-
-      expect(files).to.be.an('array')
-      expect(files).to.have.lengthOf(2)
-      expect(files).to.not.contain('test/data/fake/.hidden.js')
-    })
-
-    it('should not return files that don\'t have the ".js" extension', function () {
-      var files = loader.lookup('test/data/fake')
-
-      expect(files).to.be.an('array')
-      expect(files).to.have.lengthOf(2)
-      expect(files).to.not.contain('test/data/fake/test.jpg')
-    })
-
-    it('should remove hidden files when searching an extensionless path', function () {
-      var files = loader.lookup('test/data/fake/**')
-
-      expect(files).to.be.an('array')
-      expect(files).to.have.lengthOf(2)
-      expect(files).to.not.contain('test/data/fake/.hidden.js')
-    })
-
-    it('should remove non-.js files when searching an extensionless path', function () {
-      var files = loader.lookup('test/data/fake/**')
-
-      expect(files).to.be.an('array')
-      expect(files).to.have.lengthOf(2)
-      expect(files).to.not.contain('test/data/fake/test.jpg')
-    })
-
-    it('should return files ordered', function () {
-      var files = loader.lookup('test/data/timings')
-
-      expect(files).to.be.an('array')
-      expect(files).to.have.lengthOf(5)
-
-      expect(files[0]).to.equal('test/data/timings/first/1.js')
-      expect(files[1]).to.equal('test/data/timings/first/2.js')
-      expect(files[2]).to.equal('test/data/timings/first/3/sidejob.js')
-      expect(files[3]).to.equal('test/data/timings/second/3.js')
-      expect(files[4]).to.equal('test/data/timings/second/4.js')
-    })
-
-    it('should find a single JS file if given a specific file', function () {
-      var files = loader.lookup('test/data/timings/second/3.js')
-
-      expect(files).to.be.an('array')
-      expect(files).to.have.lengthOf(1)
-      expect(files[0]).to.equal('test/data/timings/second/3.js')
-    })
-
-    it('should recursively search directories if just a path name given', function () {
-      var files = loader.lookup('test/data/timings')
-
-      expect(files).to.be.an('array')
-      expect(files).to.have.lengthOf(5)
-
-      expect(files[0]).to.equal('test/data/timings/first/1.js')
-      expect(files[1]).to.equal('test/data/timings/first/2.js')
-      expect(files[2]).to.equal('test/data/timings/first/3/sidejob.js')
-      expect(files[3]).to.equal('test/data/timings/second/3.js')
-      expect(files[4]).to.equal('test/data/timings/second/4.js')
-    })
-
-    it('should recursively search directories if path name and "**" given', function () {
-      var files = loader.lookup('test/data/timings/**')
-
-      expect(files).to.be.an('array')
-      expect(files).to.have.lengthOf(5)
-
-      expect(files[0]).to.equal('test/data/timings/first/1.js')
-      expect(files[1]).to.equal('test/data/timings/first/2.js')
-      expect(files[2]).to.equal('test/data/timings/first/3/sidejob.js')
-      expect(files[3]).to.equal('test/data/timings/second/3.js')
-      expect(files[4]).to.equal('test/data/timings/second/4.js')
-    })
-
-    it('should not recursively search directories if "*" given after path', function () {
-      var files = loader.lookup('test/data/timings/first/*')
-
-      expect(files).to.be.an('array')
-      expect(files).to.have.lengthOf(2)
-
-      expect(files[0]).to.equal('test/data/timings/first/1.js')
-      expect(files[1]).to.equal('test/data/timings/first/2.js')
     })
   })
 })
