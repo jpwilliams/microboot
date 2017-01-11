@@ -32,19 +32,19 @@ describe('microboot/lib/loader', function () {
     expect(callbacks).to.have.lengthOf(5)
 
     expect(callbacks[0].func).to.equal(third)
-    expect(callbacks[0].path).to.equal('test/data/timings/second/3.js')
+    expect(callbacks[0].path).to.equal(resolve('test/data/timings/second/3.js'))
 
     expect(callbacks[1].func).to.equal(fourth)
-    expect(callbacks[1].path).to.equal('test/data/timings/second/4.js')
+    expect(callbacks[1].path).to.equal(resolve('test/data/timings/second/4.js'))
 
     expect(callbacks[2].func).to.equal(first)
-    expect(callbacks[2].path).to.equal('test/data/timings/first/1.js')
+    expect(callbacks[2].path).to.equal(resolve('test/data/timings/first/1.js'))
 
     expect(callbacks[3].func).to.equal(second)
-    expect(callbacks[3].path).to.equal('test/data/timings/first/2.js')
+    expect(callbacks[3].path).to.equal(resolve('test/data/timings/first/2.js'))
 
     expect(callbacks[4].func).to.equal(sidejob)
-    expect(callbacks[4].path).to.equal('test/data/timings/first/3/sidejob.js')
+    expect(callbacks[4].path).to.equal(resolve('test/data/timings/first/3/sidejob.js'))
   })
 
   it('should load all, but only add functions to run later', function () {
