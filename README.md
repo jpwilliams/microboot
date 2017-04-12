@@ -29,6 +29,44 @@ _microboot_ is a small helper designed to facilitate booting up complex applicat
 
 Using _microboot_ helps you organise your start-up by initialising your app step-by-step, reading file structures to grab everything you need.
 
+## Uses
+
+I use this tool for booting APIs and microservices within our architecture. _microboot_ lends itself really well to this as each endpoint can be instantiated in a single, isolated file and the only configuration needed to hook these together is _microboot_.
+
+``` js
+// index.js
+require('microboot')(['endpoints'])
+```
+
+``` js
+// connections/api.js
+const express = require('express')
+const api = express()
+api.listen(3000)
+module.exports = api
+```
+
+``` js
+// endpoints/get/list.js
+const api = require('../../connections/api')
+
+module.exports = () => {
+  api.get('/list', handler)
+}
+
+function handler (req, res) => {...}
+```
+
+In that example: 
+
+* `index.js` (our entry point) triggers _microboot_ to grab everything in the `endpoints` folder
+* `endpoints/get/list.js` is found and `require`d
+* `connections/api.js` is `require`d which set ups a single Express API
+* `endpoints/get/list.js` adds a GET endpoint
+* :tada:
+
+**While this is a very simple example and it could arguably be clearer having everything in a single file, the key here is _extensibility_. Having each endpoint separated into an individual file means adding or removing endpoints is as simple as adding or removing a file. No extra work needed.**
+
 ## How it works
 
 In your main file, use _microboot_ as it's used above, specifying the paths of files you want to run in the order you want them to run in. Each element in the given array is a different "phase" and files within each are sorted alphabetically to run. Here's our example:
