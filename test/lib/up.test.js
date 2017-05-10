@@ -91,6 +91,14 @@ describe('microboot/lib/up', function () {
     })
   })
 
+  it('should not catch hidden files or folders', function (done) {
+    up(['test/data/fake'], {mark: false}, function (arg) {
+      expect(arg.mark).to.equal(false)
+
+      done()
+    })
+  })
+
   it('should fail if a non-function callback is provided', function () {
     expect(up.bind(up, [], {}, {})).to.throw('optional callback on bootup must be a function')
   })
