@@ -1,6 +1,6 @@
 {
   "name": "microboot",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "description": "Boot up your app in wee little modules with the help of glob.",
   "main": "index.js",
   "scripts": {
