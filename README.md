@@ -5,14 +5,14 @@
 Boot up your app in wee little modules with the help of [glob](https://github.com/isaacs/node-glob).
 
 ``` js
-microboot([
+const system = await microboot([
   'boot/databases',
   'boot/logging',
   'api/**',
   'listeners'
-], function () {
-  console.log('App booted!')
-})
+])
+
+console.log('Service booted!')
 ```
 
 ## Contents
@@ -35,7 +35,7 @@ I use this tool for booting APIs and microservices within our architecture. _mic
 
 ``` js
 // index.js
-require('microboot')(['endpoints'])
+require('microboot')('endpoints')
 ```
 
 ``` js
@@ -57,7 +57,7 @@ module.exports = () => {
 function handler (req, res) => {...}
 ```
 
-In that example: 
+In that example:
 
 * `index.js` (our entry point) triggers _microboot_ to grab everything in the `endpoints` folder
 * `endpoints/get/list.js` is found and `require`d
@@ -69,7 +69,7 @@ In that example:
 
 ## How it works
 
-In your main file, use _microboot_ as it's used above, specifying the paths of files you want to run in the order you want them to run in. Each element in the given array is a different "phase" and files within each are sorted alphabetically to run. Here's our example:
+In your main file, use _microboot_ as it's used above, specifying a single path or multiple paths of files you want to run in the order you want them to run in. Each element in the given array is a different "stage" and files within each are sorted alphabetically to run. Here's our example:
 
 ``` js
 var microboot = require('microboot')
@@ -78,15 +78,23 @@ microboot([
   'boot/databases',
   'utils/logging.js',
   'lib/endpoints/**'
-], function (arg) {
-  console.log('Ready!')
+]).then((arg) => {
+  console.log('Boot complete!')
+}).catch((err) => {
+  console.error('Something went wrong:', err)
+  process.exit(1)
 })
 ```
 
-In the files you choose to run, ensure they export a function that will be triggered when _microboot_ iterates through. You can optionally map two parameters: one that's passed through all functions, allowing you to build the object as it goes through and system and the `done` argument which makes the step asynchronous. Here are two examples:
+In the files you choose to run, ensure they export a function that will be triggered when _microboot_ iterates through.
+
+You can optionally map two parameters: one that's passed through all functions, allowing you to build the object as it goes through and system and the `done` argument which makes the step asynchronous.
+
+You can also return a promise to make your step asynchronous. Here are some examples:
 
 ``` js
 // boot/databases/mongodb.js
+// an asynchronous stage
 module.exports = function mongodb (arg, done) {
   connectToMongoDb(function (connection) {
     arg.mongo = connection
@@ -98,14 +106,23 @@ module.exports = function mongodb (arg, done) {
 
 ``` js
 // lib/endpoints/post/login.js
+// a synchronous stage
 module.exports = function post_login (arg) {
   arg.api.newAppEndpoint('post', '/login')
 }
 ```
 
+``` js
+// lib/endpoints/goDb/setup.js
+// a promise stage, assuming goDb.setup() returns a promise
+module.exports = () => {
+  return goDb.setup()
+}
+```
+
 You're set! _microboot_ will now first run all JS files found in the `boot/databases` folder (recursively) including our `mongodb.js`, then specifically `utils/logging.js`, then all JS files found in the `lib/endpoints` folder (recursively) including our `login.js`.
 
-If you want to know more about the syntax used for specifying recursiveness and the like, take a look at [glob](https://github.com/isaacs/node-glob); it's what's behind _microboot_'s loader.
+If you want to know more about the syntax used for specifying recursiveness and the like, take a look at [glob](https://github.com/isaacs/node-glob); it's what's behind _microboot_'s loader, [_microloader_](https://github.com/jpwilliams/microloader).
 
 ## Failing to initialise
 
@@ -119,7 +136,7 @@ module.exports = function my_broken_api () {
 }
 ```
 
-For an _asynchronous_ step, return your error as the first argument of the callback:
+For a _callback_ step, return your error as the first argument of the callback:
 
 ``` js
 module.exports = function my_broken_api (arg, done) {
@@ -130,6 +147,22 @@ module.exports = function my_broken_api (arg, done) {
 
     return done()
   })
+}
+```
+
+For a _promise_ step, either reject your promise or throw if you're running an _async_ function:
+
+``` js
+module.exports = () => {
+  return new Promise((resolve, reject) => {
+    reject(new Error('Oh no!'))
+  })
+}
+
+// or
+
+module.exports = async () => {
+  throw new Error('Oh no!')
 }
 ```
 
@@ -171,7 +204,7 @@ Yay examples! These all assume the following directory tree, the root representi
 > Runs in order: `bunyan.js`, `postal.js`, `amqp.js`, `database.js`
 
 ``` js
-microboot(['boot'])
+microboot('boot')
 ```
 
 ### Running everything in `boot`, then all `utils`
@@ -190,16 +223,21 @@ microboot(['boot/*', 'boot/logging'])
 
 ## API reference
 
-#### microboot(phases, [arg], [callback])
+#### microboot(stages, [arg], [callback])
 
-* `phases` - An array of file paths (from the [CWD](https://en.wikipedia.org/wiki/Current_working_directory)) from which to load _Microboot_'s list of functions to run.
-* `arg` - _Optional, defaults to `{}`_ A single argument that is passed through every function run, allowing you to mutate it to build up the service as it boots. If `arg` is a function and no `callback` has been provided, `arg` will instead be used as the callback.
-* `callback(arg)` - _Optional_ The function to run once all phases have been successfully run. Is passed the final, mutated `arg`.
+* **Arguments**
+  * `stages` - A single file path or array of file paths (from the [CWD](https://en.wikipedia.org/wiki/Current_working_directory)) from which to load _Microboot_'s list of functions to run.
+  * `arg` - _Optional, defaults to `undefined`_ A single argument that is passed through every function run, allowing you to mutate it to build up the service as it boots. If `arg` is a function and no `callback` has been provided, `arg` will instead be used as the callback.
+  * `callback(arg)` - _Optional_ The function to run once all stages have been successfully run. Is passed the final, mutated `arg`.
 
-#### phase([arg], [callback])
+* **Returns**
+  * If `callback` defined, `undefined`.
+  * If `callback` not defined, returns a `Promise` resolving with `arg` or rejecting with an `Error`.
 
-* `arg` - _Optional_ The arg that's being passed through each phase run. Can be specified in the `microboot` call or defaults to `{}`.
-* `callback(err)` - _Optional_ If this is mapped to your phase function the phase will be treated as asynchronous and will require that this callback is run before moving to the next one. If there's an error, pass it back as the first parameter.
+#### stage([arg], [callback])
+
+* `arg` - _Optional_ The arg that's being passed through each stage run. Can be specified in the `microboot` call or defaults to `undefined`.
+* `callback(err)` - _Optional_ If this is mapped to your stage function the stage will be treated as asynchronous and will require that this callback is run before moving to the next one. If there's an error, pass it back as the first parameter. If you wish to return a `Promise`, return one and do not specify the `callback`.
 
 ## Debugging
 
