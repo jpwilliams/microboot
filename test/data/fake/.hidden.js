@@ -1,1 +1,3 @@
-module.exports = function hidden () {}
+module.exports = function hidden (arg) {
+  arg.mark = true
+}
