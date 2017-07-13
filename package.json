@@ -10,17 +10,18 @@
   "author": "Jack Williams <jack@tagstr.co>",
   "license": "ISC",
   "dependencies": {
-    "debug": "^2.4.1",
-    "glob": "^7.1.1",
+    "debug": "^2.6.8",
+    "glob": "^7.1.2",
     "microloader": "^0.4.2"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "coveralls": "^2.11.9",
-    "istanbul": "^0.4.3",
-    "mocha": "^3.0.0",
-    "sinon": "^1.17.6",
-    "sinon-chai": "^2.8.0"
+    "chai": "^4.1.0",
+    "coveralls": "^2.13.1",
+    "istanbul": "^1.0.0-alpha.1",
+    "mocha": "^3.4.2",
+    "once": "^1.4.0",
+    "sinon": "^2.3.8",
+    "sinon-chai": "^2.11.0"
   },
   "repository": {
     "type": "git",
