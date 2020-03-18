@@ -21,7 +21,7 @@
     "chai": "^4.1.0",
     "coveralls": "^3.0.0",
     "istanbul": "^1.0.0-alpha.1",
-    "mocha": "^7.0.1"
+    "mocha": "^7.1.1"
   },
   "repository": {
     "type": "git",
